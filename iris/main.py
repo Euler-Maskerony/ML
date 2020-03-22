@@ -5,7 +5,7 @@ from knn import knn
 
 count = -1
 data_l = []
-with open('data/iris.csv', newline='') as file:  # Своё напиши лол)
+with open('data/iris.csv', newline='') as file:
     reader = csv.reader(file)
     for iris in reader:
         count += 1
