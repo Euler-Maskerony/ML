@@ -1,7 +1,6 @@
 import csv
 import numpy as np
 import plot
-from knn import knn, shuffle
 
 count = -1
 data_l = []

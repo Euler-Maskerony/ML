@@ -34,7 +34,7 @@ def cross_validation(data, start, stop, step):
             min_err, c = err, param
         print('Parameter: ' + str(param))
         print('Errors: ' + str(err))
-    print('Cross validation has been completed succesfully')
+    print('Cross validation has been completed succesfully!')
     return err, c
 
 
