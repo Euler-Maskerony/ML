@@ -1,5 +1,6 @@
 import matplotlib.pyplot as mpl
 import numpy as np
+from svm import calculus, kernel
 
 ax = []
 title_num = [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
@@ -21,7 +22,7 @@ def scatter_plot(data):
             ax[i].scatter(
                 float(elem[title_num[i][0]]),
                 float(elem[title_num[i][1]]),
-                c=color[elem[5]],
+                c=color[elem[4]],
                 s=7
                 )
     mpl.show()
@@ -43,7 +44,6 @@ def color_mesh(data):
     y_grid = []
     cell_x = np.zeros(6)
     cell_y = np.zeros(6)
-    print(quality)
     for i in range(6):
         cell_x[i] = (
             ax_limits[title_num[i][0]][1]-ax_limits[title_num[i][0]][0])*width
@@ -92,3 +92,35 @@ def color_mesh(data):
     scatter_plot(init_data)
     mpl.show()
     return data
+
+
+def svm_plot(data):
+    w_real, w0_real, err_real = calculus(data, dim=4) 
+    x = data[data.shape[0]//3*2:, :4].astype('float64')
+    y = data[data.shape[0]//3*2:, 4]
+    x_t = np.delete(np.transpose(x), [4, 5], axis=0).astype('float64')
+    ax_limits = [
+        [min(x_t[0]), max(x_t[0])], [min(x_t[1]), max(x_t[1])],
+        [min(x_t[2]), max(x_t[2])], [min(x_t[3]), max(x_t[3])]
+    ]
+    for axes in range(6):
+        ax_data = np.hstack(
+            (np.reshape(x[:, title_num[axes][0]], (x.shape[0], 1)),
+                np.reshape(x[:, title_num[axes][1]], (x.shape[0], 1)),
+                np.reshape(y, (y.shape[0], 1)))
+            )
+        w, w0, err = calculus(ax_data, dim=2)
+        x_seq = np.linspace(ax_limits[title_num[axes][0]][0],
+                            ax_limits[title_num[axes][0]][1])
+        ax[axes].plot(x_seq, -x_seq*(w[0]/w[1])+w0/w[1])
+    scatter_plot(data[data.shape[0]//3*2:])
+    print('There are not actual dividing lines')
+    print('Actual equation of dividing surface is:')
+    print(str(w_real[0])+'*x_1 + '
+                        + str(w_real[1])+'*x_2 + '
+                        + str(w_real[2])+'*x_3 + '
+                        + str(w_real[3])+'*x_4 + '
+                        + ' - ' + str(w0_real) + '= 0')
+    print()
+    print('Mistakes rate on production set is: ' + str(err_real) + '%')
+    mpl.show()
