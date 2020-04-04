@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 import plot
+from knn import shuffle, knn
 
 count = -1
 data_l = []
@@ -14,6 +15,6 @@ with open('data/iris.csv', newline='') as file:
 data = np.array(data_l)
 if __name__ == "__main__":
     plot.canvas(data)
-    #plot.color_mesh(knn(data))
     data = shuffle(data)
+    #plot.color_mesh(knn(data))
     plot.svm_plot(data)

@@ -16,13 +16,14 @@ def canvas(data):
         ax[i].set_ylabel(data[0, title_num[i][1]], size=7)
 
 
-def scatter_plot(data):
+def scatter_plot(data, method):
+    matrix_shape = {'svm': 4, 'knn': 5}
     for elem in data[1:]:
         for i in range(6):
             ax[i].scatter(
                 float(elem[title_num[i][0]]),
                 float(elem[title_num[i][1]]),
-                c=color[elem[4]],
+                c=color[elem[matrix_shape[method]]],
                 s=7
                 )
     mpl.show()
@@ -89,7 +90,7 @@ def color_mesh(data):
             cmap=cmap,
             alpha=0.6
             )
-    scatter_plot(init_data)
+    scatter_plot(init_data, 'knn')
     mpl.show()
     return data
 
@@ -113,7 +114,7 @@ def svm_plot(data):
         x_seq = np.linspace(ax_limits[title_num[axes][0]][0],
                             ax_limits[title_num[axes][0]][1])
         ax[axes].plot(x_seq, -x_seq*(w[0]/w[1])+w0/w[1])
-    scatter_plot(data[data.shape[0]//3*2:])
+    scatter_plot(data[data.shape[0]//3*2:], 'svm')
     print('There are not actual dividing lines')
     print('Actual equation of dividing surface is:')
     print(str(w_real[0])+'*x_1 + '
